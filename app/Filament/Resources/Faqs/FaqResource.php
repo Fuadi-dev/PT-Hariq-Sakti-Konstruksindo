@@ -18,6 +18,16 @@ class FaqResource extends Resource
 {
     protected static ?string $model = Faq::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'FAQ';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'FAQ';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQuestionMarkCircle;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Profil Perusahaan';

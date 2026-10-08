@@ -18,6 +18,16 @@ class ProjectImageResource extends Resource
 {
     protected static ?string $model = ProjectImage::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Gambar Proyek';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Gambar Proyek';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Portofolio';

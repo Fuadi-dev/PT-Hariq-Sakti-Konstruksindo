@@ -18,6 +18,16 @@ class TestimonialResource extends Resource
 {
     protected static ?string $model = Testimonial::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Testimoni';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Testimoni';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleBottomCenterText;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Profil Perusahaan';

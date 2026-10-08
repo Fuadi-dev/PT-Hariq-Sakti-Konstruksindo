@@ -14,12 +14,18 @@ class TestimonialForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Nama')
                     ->required(),
-                TextInput::make('position'),
+                TextInput::make('position')
+                    ->label('Jabatan'),
                 Textarea::make('message')
+                    ->label('Pesan')
                     ->required()
                     ->columnSpanFull(),
                 FileUpload::make('image')
+                    ->label('Gambar')
+                    ->disk('public')
+                    ->directory('testimonials')
                     ->image(),
             ]);
     }

@@ -18,6 +18,16 @@ class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Proyek';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Proyek';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolderOpen;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Portofolio';

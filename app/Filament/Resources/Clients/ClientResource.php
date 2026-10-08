@@ -18,6 +18,16 @@ class ClientResource extends Resource
 {
     protected static ?string $model = Client::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Klien';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Klien';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Portofolio';

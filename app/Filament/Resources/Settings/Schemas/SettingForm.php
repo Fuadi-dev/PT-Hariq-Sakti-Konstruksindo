@@ -13,8 +13,10 @@ class SettingForm
         return $schema
             ->components([
                 TextInput::make('key')
+                    ->label('Kunci')
                     ->required(),
                 Textarea::make('value')
+                    ->label('Nilai')
                     ->columnSpanFull(),
                 TextInput::make('type')
                     ->required()

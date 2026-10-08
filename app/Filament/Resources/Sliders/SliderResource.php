@@ -18,6 +18,16 @@ class SliderResource extends Resource
 {
     protected static ?string $model = Slider::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Slider';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Slider';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPresentationChartLine;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Tampilan Depan';

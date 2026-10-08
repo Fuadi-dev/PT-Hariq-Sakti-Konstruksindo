@@ -18,6 +18,16 @@ class ContactLeadResource extends Resource
 {
     protected static ?string $model = ContactLead::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Pesan Masuk';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Pesan Masuk';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedInboxArrowDown;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Leads & Marketing';

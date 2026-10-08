@@ -18,6 +18,16 @@ class VisitorResource extends Resource
 {
     protected static ?string $model = Visitor::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Pengunjung';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Pengunjung';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartBar;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Sistem & Pengaturan';

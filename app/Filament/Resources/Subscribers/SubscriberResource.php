@@ -18,6 +18,16 @@ class SubscriberResource extends Resource
 {
     protected static ?string $model = Subscriber::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Langganan';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Langganan';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Leads & Marketing';

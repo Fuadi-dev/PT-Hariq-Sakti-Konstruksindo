@@ -18,6 +18,16 @@ class ActivityLogResource extends Resource
 {
     protected static ?string $model = ActivityLog::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Log Aktivitas';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Log Aktivitas';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Sistem & Pengaturan';

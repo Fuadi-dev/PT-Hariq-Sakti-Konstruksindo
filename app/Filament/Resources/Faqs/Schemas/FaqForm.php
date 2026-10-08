@@ -14,15 +14,19 @@ class FaqForm
         return $schema
             ->components([
                 TextInput::make('question')
+                    ->label('Pertanyaan')
                     ->required(),
                 Textarea::make('answer')
+                    ->label('Jawaban')
                     ->required()
                     ->columnSpanFull(),
                 TextInput::make('order')
+                    ->label('Urutan')
                     ->required()
                     ->numeric()
                     ->default(0),
                 Toggle::make('is_active')
+                    ->label('Status Aktif')
                     ->required(),
             ]);
     }

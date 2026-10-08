@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ActivityLogs\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
@@ -12,8 +13,11 @@ class ActivityLogForm
     {
         return $schema
             ->components([
-                TextInput::make('user_id')
-                    ->numeric(),
+                Select::make('user_id')
+                    ->label('Pengguna')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->preload(),
                 TextInput::make('action_type')
                     ->required(),
                 TextInput::make('model_type')
@@ -22,6 +26,7 @@ class ActivityLogForm
                     ->required()
                     ->numeric(),
                 Textarea::make('description')
+                    ->label('Deskripsi')
                     ->columnSpanFull(),
             ]);
     }

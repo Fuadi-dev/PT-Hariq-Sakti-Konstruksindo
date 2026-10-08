@@ -13,10 +13,13 @@ class PageForm
         return $schema
             ->components([
                 TextInput::make('title')
+                    ->label('Judul')
                     ->required(),
                 TextInput::make('slug')
+                    ->label('Slug')
                     ->required(),
                 Textarea::make('content')
+                    ->label('Konten')
                     ->columnSpanFull(),
                 Textarea::make('meta_description')
                     ->columnSpanFull(),

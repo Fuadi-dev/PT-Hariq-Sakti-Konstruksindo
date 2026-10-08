@@ -14,12 +14,18 @@ class ServiceForm
         return $schema
             ->components([
                 TextInput::make('title')
+                    ->label('Judul')
                     ->required(),
                 TextInput::make('slug')
+                    ->label('Slug')
                     ->required(),
                 Textarea::make('description')
+                    ->label('Deskripsi')
                     ->columnSpanFull(),
                 FileUpload::make('icon_or_image')
+                    ->label('Ikon/Gambar')
+                    ->disk('public')
+                    ->directory('services')
                     ->image(),
             ]);
     }

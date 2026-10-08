@@ -14,9 +14,11 @@ class ContactLeadForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Nama')
                     ->required(),
                 TextInput::make('company'),
                 Textarea::make('message')
+                    ->label('Pesan')
                     ->columnSpanFull(),
                 Toggle::make('is_followed_up')
                     ->required(),

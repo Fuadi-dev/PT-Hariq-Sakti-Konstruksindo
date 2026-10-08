@@ -15,20 +15,29 @@ class SliderForm
         return $schema
             ->components([
                 TextInput::make('title')
+                    ->label('Judul')
                     ->required(),
                 Textarea::make('subtitle')
+                    ->label('Sub Judul')
                     ->columnSpanFull(),
                 FileUpload::make('image_path')
+                    ->label('Gambar')
+                    ->disk('public')
+                    ->directory('sliders')
                     ->image()
                     ->required(),
-                TextInput::make('button_text'),
+                TextInput::make('button_text')
+                    ->label('Teks Tombol'),
                 TextInput::make('button_url')
+                    ->label('URL Tombol')
                     ->url(),
                 TextInput::make('order')
+                    ->label('Urutan')
                     ->required()
                     ->numeric()
                     ->default(0),
                 Toggle::make('is_active')
+                    ->label('Status Aktif')
                     ->required(),
             ]);
     }

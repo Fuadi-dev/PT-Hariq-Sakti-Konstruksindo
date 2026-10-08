@@ -18,6 +18,16 @@ class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Layanan';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Layanan';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSparkles;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Profil Perusahaan';

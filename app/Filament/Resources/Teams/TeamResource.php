@@ -18,6 +18,16 @@ class TeamResource extends Resource
 {
     protected static ?string $model = Team::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Tim';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Tim';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Profil Perusahaan';

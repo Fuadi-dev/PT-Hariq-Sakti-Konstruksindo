@@ -18,6 +18,16 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Artikel';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Artikel';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Blog & Artikel';

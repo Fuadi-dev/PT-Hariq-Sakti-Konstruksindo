@@ -18,6 +18,16 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
+    public static function getModelLabel(): string
+    {
+        return 'Kategori';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Kategori';
+    }
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Blog & Artikel';
