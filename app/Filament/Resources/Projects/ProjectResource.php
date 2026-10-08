@@ -32,6 +32,8 @@ class ProjectResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Portofolio';
 
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Schema $schema): Schema

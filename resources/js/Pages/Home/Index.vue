@@ -31,7 +31,9 @@ const underline =
         <!-- Navbar -->
         <header class="sticky top-0 z-40 border-b-2 border-zinc-900 bg-zinc-50/95 backdrop-blur">
             <nav class="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 sm:px-10">
-                <a href="/" class="text-sm font-black uppercase tracking-tight">{{ company_settings?.company_name ?? 'HSK' }}</a>
+                <a href="/" class="flex items-center">
+                    <img src="/img/logo.jpeg" alt="Logo HSK" class="h-8 sm:h-10 w-auto object-contain" />
+                </a>
                 <div class="hidden gap-8 text-xs font-semibold uppercase tracking-widest md:flex">
                     <a href="#layanan" class="hover:text-orange-600">Layanan</a>
                     <a href="#proyek" class="hover:text-orange-600">Proyek</a>
@@ -43,11 +45,17 @@ const underline =
 
         <HeroSection :settings="company_settings" :projects="projects" :sliders="sliders" />
 
-        <!-- Marquee klien (PROPS: clients[].logo) -->
-        <section class="overflow-hidden border-b-2 border-zinc-900 py-8">
-            <div class="marquee flex w-max items-center gap-16 px-8">
-                <img v-for="(c, i) in [...clients, ...clients]" :key="i" :src="c.logo" :alt="c.name"
-                    class="h-10 w-auto opacity-50 grayscale transition hover:opacity-100 hover:grayscale-0" />
+        <!-- Klien (Marquee) -->
+        <section class="relative overflow-hidden border-b-2 border-zinc-900 py-10 bg-zinc-50 flex items-center">
+            <!-- Fade edges agar ujung layarnya memudar -->
+            <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 md:w-32 bg-gradient-to-r from-zinc-50 to-transparent"></div>
+            <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 md:w-32 bg-gradient-to-l from-zinc-50 to-transparent"></div>
+            
+            <div class="flex w-max animate-marquee items-center gap-16 pl-16 hover:[animation-play-state:paused]">
+                <template v-for="n in 12" :key="n">
+                    <img v-for="c in clients" :key="`${n}-${c.id}`" :src="c.logo" :alt="c.name"
+                        class="h-12 w-auto opacity-50 grayscale transition-all duration-300 hover:scale-110 hover:opacity-100 hover:grayscale-0" />
+                </template>
             </div>
         </section>
 

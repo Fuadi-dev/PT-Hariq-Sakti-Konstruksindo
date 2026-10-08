@@ -29,6 +29,23 @@ class ProjectForm
                     ->label('Deskripsi')
                     ->columnSpanFull(),
                 DatePicker::make('completion_date'),
+                \Filament\Forms\Components\Repeater::make('images')
+                    ->label('Daftar Gambar Proyek')
+                    ->relationship('images')
+                    ->schema([
+                        \Filament\Forms\Components\FileUpload::make('image_path')
+                            ->label('Gambar')
+                            ->disk('public')
+                            ->directory('projects')
+                            ->image()
+                            ->required(),
+                        \Filament\Forms\Components\Toggle::make('is_primary')
+                            ->label('Gambar Utama')
+                            ->default(false),
+                    ])
+                    ->grid(2)
+                    ->columnSpanFull()
+                    ->defaultItems(0),
             ]);
     }
 }

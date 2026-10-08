@@ -35,24 +35,32 @@ const stats = computed(() => [
                     {{ settings?.company_name ?? 'PT Hariq Sakti Konstruksindo' }} — Est. {{ settings?.founded_year ?? '2012' }}
                 </p>
 
-                <h1 class="text-[clamp(3rem,10vw,9rem)] font-black uppercase leading-[0.88] tracking-tighter text-zinc-900">
-                    Kami
-                    <span class="block text-orange-600">membangun</span>
-                    <span class="block">yang bertahan<span class="text-orange-600">.</span></span>
-                </h1>
+                <div class="relative z-10">
+                    <!-- Glow effect di belakang teks -->
+                    <div class="absolute -inset-x-10 -inset-y-5 -z-10 bg-gradient-to-tr from-orange-200/40 via-transparent to-amber-200/30 blur-3xl rounded-full"></div>
+                    
+                    <h1 class="text-[clamp(3rem,9vw,7.5rem)] font-extrabold leading-[0.95] tracking-tight text-zinc-900">
+                        <span class="block opacity-90 transition-opacity hover:opacity-100">Kami</span>
+                        <span class="block w-fit bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 bg-clip-text text-transparent pb-4 -mb-4 drop-shadow-sm transition-transform duration-500 hover:scale-105 hover:drop-shadow-lg cursor-default">
+                            membangun
+                        </span>
+                        <span class="block opacity-90 transition-opacity hover:opacity-100">yang bertahan<span class="text-orange-600">.</span></span>
+                    </h1>
+                </div>
 
-                <div class="mt-12 grid gap-8 md:grid-cols-2">
+                <div class="mt-14 grid gap-8 md:grid-cols-2">
                     <!-- PROPS: tagline dari company_settings -->
-                    <p class="max-w-md text-lg leading-relaxed text-zinc-700">
+                    <p class="max-w-md text-lg leading-relaxed text-zinc-600">
                         {{ settings?.tagline ?? 'Kontraktor sipil dan struktur yang menepati jadwal, menjaga anggaran, dan tidak berkompromi pada keselamatan kerja. Dari gudang industri hingga gedung bertingkat.' }}
                     </p>
-                    <div class="flex items-end gap-4 md:justify-end">
-                        <a href="#kontak" class="group inline-flex items-center gap-3 bg-zinc-900 px-7 py-4 text-sm font-semibold uppercase tracking-wider text-zinc-50 transition-colors hover:bg-orange-600">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-6 md:justify-end md:pb-2">
+                        <a href="#kontak" class="group inline-flex items-center justify-center gap-3 bg-zinc-900 px-8 py-4 text-sm font-bold uppercase tracking-wider text-zinc-50 transition-all hover:bg-orange-600 hover:-translate-y-1 hover:shadow-[4px_4px_0_0_#ea580c]">
                             Diskusikan Proyek
-                            <span class="transition-transform group-hover:translate-x-1">→</span>
+                            <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
                         </a>
-                        <a href="#proyek" class="border-b-2 border-zinc-900 pb-1 text-sm font-semibold uppercase tracking-wider transition-colors hover:border-orange-600 hover:text-orange-600">
+                        <a href="#proyek" class="group inline-flex items-center justify-center gap-2 border-b-2 border-zinc-900 pb-1 text-sm font-bold uppercase tracking-wider text-zinc-900 transition-colors hover:border-orange-600 hover:text-orange-600">
                             Lihat Portofolio
+                            <span class="opacity-0 -ml-2 transition-all group-hover:ml-0 group-hover:opacity-100">&rarr;</span>
                         </a>
                     </div>
                 </div>
