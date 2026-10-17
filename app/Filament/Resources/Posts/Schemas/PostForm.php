@@ -30,9 +30,6 @@ class PostForm
                 TextInput::make('title')
                     ->label('Judul')
                     ->required(),
-                TextInput::make('slug')
-                    ->label('Slug')
-                    ->required(),
                 Textarea::make('content')
                     ->label('Konten')
                     ->columnSpanFull(),
@@ -41,8 +38,12 @@ class PostForm
                     ->image()
                     ->disk('public')
                     ->directory('posts'),
-                TextInput::make('status')
+                Select::make('status')
                     ->label('Status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Dipublikasikan',
+                    ])
                     ->required()
                     ->default('draft'),
                 DateTimePicker::make('published_at')

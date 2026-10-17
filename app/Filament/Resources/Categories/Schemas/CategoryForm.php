@@ -14,9 +14,6 @@ class CategoryForm
                 TextInput::make('name')
                     ->label('Nama')
                     ->required(),
-                TextInput::make('slug')
-                    ->label('Slug')
-                    ->required(),
             ]);
     }
 }

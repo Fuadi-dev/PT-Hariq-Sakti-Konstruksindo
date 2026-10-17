@@ -18,4 +18,13 @@ class Category extends Model
     {
         return $this->hasMany(Post::class);
     }
+
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            if ($model->isDirty('name')) {
+                $model->slug = \Illuminate\Support\Str::slug($model->name);
+            }
+        });
+    }
 }

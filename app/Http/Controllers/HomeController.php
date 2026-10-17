@@ -35,14 +35,16 @@ class HomeController extends Controller
             'services' => Service::latest()->get()->map(fn ($s) => [
                 'id' => $s->id,
                 'title' => $s->title,
+                'slug' => $s->slug,
                 'description' => $s->description,
                 'icon' => $s->icon_or_image ? $this->url($s->icon_or_image) : null,
             ]),
 
-            'clients' => Client::whereNotNull('logo')->get()->map(fn ($c) => [
+            'clients' => Client::all()->map(fn ($c) => [
                 'id' => $c->id,
                 'name' => $c->name,
-                'logo' => $this->url($c->logo),
+                'logo' => $c->logo ? $this->url($c->logo) : null,
+                'website_url' => $c->website_url,
             ]),
 
             'projects' => Project::with(['images', 'client'])->latest('completion_date')->take(6)->get()->map(function ($p) {
@@ -51,19 +53,23 @@ class HomeController extends Controller
                 return [
                     'id' => $p->id,
                     'title' => $p->title,
+                    'slug' => $p->slug,
+                    'description' => $p->description,
                     'image' => $img ? $this->url($img->image_path) : null,
                     'category' => $p->client?->name,
+                    'client_name' => $p->client?->name,
                     'year' => $p->completion_date ? \Carbon\Carbon::parse($p->completion_date)->year : null,
                 ];
             }),
 
-            'posts' => Post::where('status', 'published')->latest('published_at')->take(5)->get()->map(fn ($p) => [
+            'posts' => Post::with('category')->where('status', 'published')->latest('published_at')->take(6)->get()->map(fn ($p) => [
                 'id' => $p->id,
                 'title' => $p->title,
                 'slug' => $p->slug,
+                'category' => $p->category?->name,
                 'excerpt' => str(strip_tags((string) $p->content))->limit(140)->toString(),
                 'thumbnail' => $p->thumbnail ? $this->url($p->thumbnail) : null,
-                'published_at' => $p->published_at?->translatedFormat('d M Y'),
+                'published_at' => $p->published_at ? \Carbon\Carbon::parse($p->published_at)->format('d M Y') : null,
             ]),
 
             // Disesuaikan dengan props di Vue: message -> content, position -> company
@@ -72,6 +78,14 @@ class HomeController extends Controller
                 'name' => $t->name,
                 'company' => $t->position,
                 'content' => $t->message,
+            ]),
+
+            'teams' => \App\Models\Team::all()->map(fn ($t) => [
+                'id' => $t->id,
+                'name' => $t->name,
+                'position' => $t->position,
+                'photo' => $t->photo ? $this->url($t->photo) : null,
+                'linkedin_url' => $t->linkedin_url,
             ]),
         ]);
     }

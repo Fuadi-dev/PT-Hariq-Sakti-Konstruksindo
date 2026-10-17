@@ -15,9 +15,6 @@ class PageForm
                 TextInput::make('title')
                     ->label('Judul')
                     ->required(),
-                TextInput::make('slug')
-                    ->label('Slug')
-                    ->required(),
                 Textarea::make('content')
                     ->label('Konten')
                     ->columnSpanFull(),

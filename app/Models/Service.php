@@ -15,4 +15,13 @@ class Service extends Model
         'description',
         'icon_or_image',
     ];
+
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            if ($model->isDirty('title')) {
+                $model->slug = \Illuminate\Support\Str::slug($model->title);
+            }
+        });
+    }
 }

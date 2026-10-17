@@ -22,9 +22,6 @@ class ProjectForm
                 TextInput::make('title')
                     ->label('Judul')
                     ->required(),
-                TextInput::make('slug')
-                    ->label('Slug')
-                    ->required(),
                 Textarea::make('description')
                     ->label('Deskripsi')
                     ->columnSpanFull(),
@@ -41,7 +38,27 @@ class ProjectForm
                             ->required(),
                         \Filament\Forms\Components\Toggle::make('is_primary')
                             ->label('Gambar Utama')
-                            ->default(false),
+                            ->default(false)
+                            ->live()
+                            ->afterStateUpdated(function ($state, \Filament\Forms\Components\Toggle $component, \Livewire\Component $livewire) {
+                                if ($state) {
+                                    $statePath = $component->getStatePath();
+                                    // Ambil path repeater (contoh: data.images atau images)
+                                    preg_match('/^(.*images)\./', $statePath, $matches);
+                                    if (!empty($matches[1])) {
+                                        $repeaterPath = $matches[1];
+                                        $items = data_get($livewire, $repeaterPath);
+                                        if (is_array($items)) {
+                                            foreach ($items as $uuid => $item) {
+                                                $itemPath = "{$repeaterPath}.{$uuid}.is_primary";
+                                                if ($itemPath !== $statePath) {
+                                                    data_set($livewire, $itemPath, false);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }),
                     ])
                     ->grid(2)
                     ->columnSpanFull()

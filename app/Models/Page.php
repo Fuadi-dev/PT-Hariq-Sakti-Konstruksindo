@@ -15,4 +15,13 @@ class Page extends Model
         'content',
         'meta_description',
     ];
+
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            if ($model->isDirty('title')) {
+                $model->slug = \Illuminate\Support\Str::slug($model->title);
+            }
+        });
+    }
 }

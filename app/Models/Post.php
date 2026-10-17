@@ -33,4 +33,13 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected static function booted()
+    {
+        static::saving(function ($model) {
+            if ($model->isDirty('title')) {
+                $model->slug = \Illuminate\Support\Str::slug($model->title);
+            }
+        });
+    }
 }

@@ -12,8 +12,19 @@ export default {
 
     theme: {
         extend: {
+            colors: {
+                brand: {
+                    orange: '#E65100',
+                    accent: '#F97316',
+                    dark: '#121417',
+                    surface: '#1A1D21',
+                    muted: '#6B7280',
+                    light: '#F8F9FA',
+                },
+            },
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['"Plus Jakarta Sans"', ...defaultTheme.fontFamily.sans],
+                display: ['"Space Grotesk"', 'sans-serif'],
             },
             keyframes: {
                 marquee: {
