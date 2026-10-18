@@ -40,21 +40,6 @@ class SettingSeeder extends Seeder
                 'value' => '2012',
                 'type' => 'text',
             ],
-            [
-                'key' => 'years_experience',
-                'value' => '12+',
-                'type' => 'text',
-            ],
-            [
-                'key' => 'projects_done',
-                'value' => '250+',
-                'type' => 'text',
-            ],
-            [
-                'key' => 'engineers',
-                'value' => '80+',
-                'type' => 'text',
-            ],
         ];
 
         foreach ($settings as $item) {
