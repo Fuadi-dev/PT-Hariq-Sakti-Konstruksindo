@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactLead;
+use App\Models\Service;
 use App\Models\Setting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,19 +16,36 @@ class ContactController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'company' => ['nullable', 'string', 'max:255'],
+            'service_id' => ['nullable', 'integer', 'exists:services,id'],
             'service' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:2000'],
         ]);
 
-        $leadMessage = $data['message'];
-        if (!empty($data['service'])) {
-            $leadMessage = "[Jenis Pekerjaan: {$data['service']}]\n\n" . $data['message'];
+        $serviceId = $data['service_id'] ?? null;
+        $serviceName = null;
+
+        if ($serviceId) {
+            $serviceName = Service::find($serviceId)?->title;
+        } elseif (!empty($data['service'])) {
+            $matchedService = Service::where('title', $data['service'])->first();
+            if ($matchedService) {
+                $serviceId = $matchedService->id;
+                $serviceName = $matchedService->title;
+            } else {
+                $serviceName = $data['service'];
+            }
         }
 
-        // Simpan lead terlebih dahulu
+        $leadMessage = $data['message'];
+        if ($serviceName) {
+            $leadMessage = "[Jenis Layanan: {$serviceName}]\n\n" . $data['message'];
+        }
+
+        // Simpan lead terlebih dahulu dengan relasi service_id
         ContactLead::create([
             'name' => $data['name'],
             'company' => $data['company'] ?? null,
+            'service_id' => $serviceId,
             'message' => $leadMessage,
         ]);
 
@@ -43,7 +61,7 @@ class ContactController extends Controller
 
         $text = "Halo PT Hariq Sakti Konstruksindo, saya {$data['name']}"
             .($data['company'] ? " dari {$data['company']}" : '')
-            .(!empty($data['service']) ? "\n*Jenis Pekerjaan:* {$data['service']}" : '')
+            .($serviceName ? "\n*Jenis Layanan:* {$serviceName}" : '')
             .".\n\n*Pesan / Kebutuhan Proyek:*\n{$data['message']}";
 
         // Inertia::location memaksa redirect penuh ke domain eksternal (wa.me)

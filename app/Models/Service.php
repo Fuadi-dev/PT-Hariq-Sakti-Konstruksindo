@@ -16,6 +16,11 @@ class Service extends Model
         'icon_or_image',
     ];
 
+    public function contactLeads(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ContactLead::class);
+    }
+
     protected static function booted()
     {
         static::saving(function ($model) {

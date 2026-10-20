@@ -10,6 +10,37 @@ use Inertia\Response;
 
 class ArticleController extends Controller
 {
+    public function index(Request $request): Response
+    {
+        $query = Post::with('category')->where('status', 'published');
+
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $query->where(function ($sub) use ($q) {
+                $sub->where('title', 'like', "%{$q}%")
+                    ->orWhere('content', 'like', "%{$q}%");
+            });
+        }
+
+        $posts = $query->latest('published_at')->paginate(9)->withQueryString()->through(fn ($p) => [
+            'id' => $p->id,
+            'title' => $p->title,
+            'slug' => $p->slug,
+            'category' => $p->category?->name,
+            'excerpt' => str(strip_tags((string) $p->content))->limit(130)->toString(),
+            'thumbnail' => $p->thumbnail ? $this->url($p->thumbnail) : null,
+            'published_at' => $p->published_at ? \Carbon\Carbon::parse($p->published_at)->format('d M Y') : null,
+        ]);
+
+        $companySettings = Setting::pluck('value', 'key');
+
+        return Inertia::render('Article/Index', [
+            'company_settings' => $companySettings,
+            'posts' => $posts,
+            'filters' => $request->only(['q']),
+        ]);
+    }
+
     public function show(string $slug): Response
     {
         $post = Post::with(['category', 'user'])
@@ -47,7 +78,7 @@ class ArticleController extends Controller
                 'slug' => $post->slug,
                 'content' => $post->content,
                 'thumbnail' => $post->thumbnail ? $this->url($post->thumbnail) : null,
-                'category' => $post->category?->name ?? 'Catatan Lapangan',
+                'category' => $post->category?->name ?? 'Artikel',
                 'author' => $post->user?->name ?? 'Tim QA/QC & Engineering HSK',
                 'published_at' => $post->published_at ? \Carbon\Carbon::parse($post->published_at)->format('d M Y') : null,
                 'read_time' => "{$readMinutes} menit membaca",

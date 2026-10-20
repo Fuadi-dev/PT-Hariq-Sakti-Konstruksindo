@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\Visitors;
 
-use App\Filament\Resources\Visitors\Pages\CreateVisitor;
-use App\Filament\Resources\Visitors\Pages\EditVisitor;
 use App\Filament\Resources\Visitors\Pages\ListVisitors;
 use App\Filament\Resources\Visitors\Schemas\VisitorForm;
 use App\Filament\Resources\Visitors\Tables\VisitorsTable;
@@ -34,6 +32,11 @@ class VisitorResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'ip_address';
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return VisitorForm::configure($schema);
@@ -55,8 +58,6 @@ class VisitorResource extends Resource
     {
         return [
             'index' => ListVisitors::route('/'),
-            'create' => CreateVisitor::route('/create'),
-            'edit' => EditVisitor::route('/{record}/edit'),
         ];
     }
 }

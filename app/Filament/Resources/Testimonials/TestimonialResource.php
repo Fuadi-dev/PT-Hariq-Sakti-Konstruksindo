@@ -30,7 +30,9 @@ class TestimonialResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleBottomCenterText;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Profil Perusahaan';
+    protected static string|\UnitEnum|null $navigationGroup = 'Pesan & Testimoni';
+
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'name';
 

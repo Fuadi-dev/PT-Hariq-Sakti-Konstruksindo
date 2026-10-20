@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
+import Navbar from '@/Components/Navbar.vue';
 
 interface PostDetail {
     id: number;
@@ -30,9 +31,6 @@ const props = defineProps<{
     related_posts: RelatedPost[];
 }>();
 
-// Mobile navigation drawer toggle
-const mobileMenuOpen = ref(false);
-
 // Salin link feedback state
 const linkCopied = ref(false);
 const copyCurrentUrl = () => {
@@ -51,7 +49,7 @@ const fallbackArticleImg =
 
 const whatsappShareUrl = () => {
     if (typeof window !== 'undefined') {
-        const text = `Baca catatan lapangan "${props.post.title}" dari PT Hariq Sakti Konstruksindo: ${window.location.href}`;
+        const text = `Baca artikel "${props.post.title}" dari PT Hariq Sakti Konstruksindo: ${window.location.href}`;
         return `https://wa.me/?text=${encodeURIComponent(text)}`;
     }
     return '#';
@@ -65,59 +63,18 @@ const whatsappShareUrl = () => {
 
     <div class="bg-white text-zinc-900 selection:bg-orange-500 selection:text-white min-h-screen flex flex-col justify-between">
         <!-- BEGIN: MainHeader -->
-        <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-zinc-200">
-            <div class="max-w-[1440px] mx-auto px-6 md:px-10 h-20 flex items-center justify-between">
-                <!-- Company Brand Identity -->
-                <a aria-label="Beranda PT Hariq Sakti Konstruksindo" class="flex items-center group" href="/">
-                    <img src="/img/logo.jpeg" alt="PT. Hariq Sakti Konstruksindo" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-                </a>
-
-                <!-- Primary Navigation Links -->
-                <nav aria-label="Navigasi Utama" class="hidden md:flex items-center gap-8 lg:gap-10 text-xs font-bold tracking-wider uppercase text-zinc-800">
-                    <a class="hover:text-brand-orange transition-colors" href="/#layanan">LAYANAN</a>
-                    <a class="hover:text-brand-orange transition-colors" href="/#proyek">PROYEK</a>
-                    <a class="text-brand-orange transition-colors" href="/#artikel">ARTIKEL</a>
-                    <a class="hover:text-brand-orange transition-colors" href="/#tim">TIM</a>
-                    <a class="hover:text-brand-orange transition-colors" href="/#kontak">KONTAK</a>
-                </nav>
-
-                <!-- Action Consultation Button & Mobile Toggle -->
-                <div class="flex items-center gap-4">
-                    <a class="hidden sm:inline-flex items-center justify-center text-xs font-bold uppercase tracking-wider px-5 py-3 border border-zinc-900 hover:bg-zinc-900 hover:text-white transition-all duration-200" href="/#kontak">
-                        KONSULTASI GRATIS
-                    </a>
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Buka Menu" class="inline-flex md:hidden p-2 text-zinc-900 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path v-if="!mobileMenuOpen" d="M4 6h16M4 12h16m-7 6h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                            <path v-else d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mobile Nav Dropdown -->
-            <div v-if="mobileMenuOpen" class="md:hidden border-b border-zinc-200 bg-white px-6 py-5 flex flex-col gap-4 text-xs font-bold tracking-wider uppercase shadow-md">
-                <a @click="mobileMenuOpen = false" class="hover:text-brand-orange py-1" href="/#layanan">LAYANAN</a>
-                <a @click="mobileMenuOpen = false" class="hover:text-brand-orange py-1" href="/#proyek">PROYEK</a>
-                <a @click="mobileMenuOpen = false" class="text-brand-orange py-1" href="/#artikel">ARTIKEL</a>
-                <a @click="mobileMenuOpen = false" class="hover:text-brand-orange py-1" href="/#tim">TIM</a>
-                <a @click="mobileMenuOpen = false" class="hover:text-brand-orange py-1" href="/#kontak">KONTAK</a>
-                <a @click="mobileMenuOpen = false" class="inline-flex items-center justify-center text-xs font-bold uppercase tracking-wider px-5 py-3 bg-zinc-950 text-white mt-2" href="/#kontak">
-                    KONSULTASI GRATIS
-                </a>
-            </div>
-        </header>
+        <Navbar :company-settings="company_settings" current-page="artikel" />
         <!-- END: MainHeader -->
 
-        <main class="flex-grow">
+        <main class="flex-grow pt-20">
             <!-- Article Header Section -->
             <section class="border-b border-zinc-200 bg-zinc-50/60 py-12 md:py-16">
                 <div class="max-w-[1100px] mx-auto px-6 md:px-10">
                     <!-- Breadcrumbs -->
                     <nav class="flex items-center gap-2 text-xs font-mono text-zinc-500 uppercase tracking-wider mb-8">
-                        <a href="/" class="hover:text-brand-orange transition-colors">Beranda</a>
+                        <Link href="/" class="hover:text-brand-orange transition-colors">Beranda</Link>
                         <span>/</span>
-                        <a href="/#artikel" class="hover:text-brand-orange transition-colors">Catatan Lapangan</a>
+                        <Link href="/artikel" class="hover:text-brand-orange transition-colors">Artikel</Link>
                         <span>/</span>
                         <span class="text-zinc-900 font-bold truncate max-w-[200px] sm:max-w-md">{{ post.title }}</span>
                     </nav>
@@ -188,7 +145,7 @@ const whatsappShareUrl = () => {
                             <!-- Share & Action Bar -->
                             <div class="mt-12 pt-8 border-t border-zinc-200 flex flex-wrap items-center justify-between gap-4">
                                 <span class="text-xs uppercase font-bold tracking-wider text-zinc-500 font-mono">
-                                    BAGIKAN CATATAN LAPANGAN:
+                                    BAGIKAN ARTIKEL:
                                 </span>
                                 <div class="flex items-center gap-3">
                                     <a :href="whatsappShareUrl()" target="_blank"
@@ -210,7 +167,7 @@ const whatsappShareUrl = () => {
                                 <div class="text-xs text-zinc-600 space-y-1">
                                     <p class="font-bold text-zinc-900 font-display text-sm uppercase">PT Hariq Sakti Konstruksindo</p>
                                     <p class="leading-relaxed">
-                                        Laporan catatan lapangan ini disusun oleh tim teknis lapangan. Kami berkomitmen memberikan transparansi progres dan standar keselamatan kerja tertinggi di setiap proyek konstruksi sipil dan struktur.
+                                        Artikel ini disusun oleh tim profesional kami. Kami berkomitmen memberikan transparansi progres dan standar mutu keselamatan kerja tertinggi di setiap proyek konstruksi sipil dan struktur.
                                     </p>
                                 </div>
                             </div>
@@ -269,12 +226,12 @@ const whatsappShareUrl = () => {
                         <div>
                             <span class="text-xs uppercase tracking-widest font-bold text-brand-orange">DOKUMENTASI LAINNYA</span>
                             <h2 class="text-2xl sm:text-3xl font-display font-extrabold text-zinc-950 mt-1">
-                                Catatan Lapangan Terkait
+                                Artikel Terkait
                             </h2>
                         </div>
-                        <a href="/#artikel" class="text-xs uppercase font-bold tracking-wider text-zinc-700 hover:text-brand-orange transition-colors">
-                            Lihat Semua →
-                        </a>
+                        <Link href="/artikel" class="text-xs uppercase font-bold tracking-wider text-zinc-700 hover:text-brand-orange transition-colors">
+                            Lihat Semua Artikel →
+                        </Link>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -283,7 +240,7 @@ const whatsappShareUrl = () => {
                             <div>
                                 <div class="aspect-[16/10] overflow-hidden bg-zinc-100 relative">
                                     <img :src="rel.thumbnail || fallbackArticleImg" :alt="rel.title"
-                                        class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" />
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
                                 </div>
                                 <div class="p-5">
                                     <div class="flex items-center gap-2 text-xs font-mono text-zinc-500 mb-2">
@@ -322,11 +279,11 @@ const whatsappShareUrl = () => {
 
                 <!-- Quick Footer Links -->
                 <div class="flex flex-wrap items-center gap-6 font-semibold uppercase tracking-wider text-zinc-700">
-                    <a class="hover:text-brand-orange transition-colors" href="/#layanan">Layanan</a>
-                    <a class="hover:text-brand-orange transition-colors" href="/#proyek">Proyek</a>
-                    <a class="hover:text-brand-orange transition-colors" href="/#artikel">Catatan Lapangan</a>
-                    <a class="hover:text-brand-orange transition-colors" href="/#tim">Tim Ahli</a>
-                    <a class="hover:text-brand-orange transition-colors" href="/#kontak">Kontak</a>
+                    <Link class="hover:text-brand-orange transition-colors" href="/#beranda">Beranda</Link>
+                    <Link class="hover:text-brand-orange transition-colors" href="/layanan">Layanan</Link>
+                    <Link class="hover:text-brand-orange transition-colors" href="/proyek">Proyek</Link>
+                    <Link class="hover:text-brand-orange transition-colors" href="/artikel">Artikel</Link>
+                    <Link class="hover:text-brand-orange transition-colors" href="/#kontak">Kontak</Link>
                 </div>
             </div>
         </footer>

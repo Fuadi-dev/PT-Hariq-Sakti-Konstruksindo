@@ -37,6 +37,13 @@ class UsersTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('role')
                     ->label('Peran')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'superadmin' => 'danger',
+                        'admin' => 'info',
+                        'writer' => 'success',
+                        default => 'gray',
+                    })
                     ->searchable(),
             ])
             ->filters([

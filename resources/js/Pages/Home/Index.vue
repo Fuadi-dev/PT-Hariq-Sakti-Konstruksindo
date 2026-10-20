@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import Navbar from '@/Components/Navbar.vue';
 import HeroSection from '@/Components/HeroSection.vue';
 import BentoServices from '@/Components/BentoServices.vue';
 
@@ -71,16 +72,9 @@ const props = defineProps<{
 // Mobile Navigation Drawer Toggle
 const mobileMenuOpen = ref(false);
 
-// Proyek Terpilih & Filter Kategori
-const selectedCategory = ref('Semua Proyek');
-const activeProjectId = ref<number | null>(null);
-
-const activeProject = computed(() => {
-    if (activeProjectId.value !== null) {
-        const found = props.projects.find((p) => p.id === activeProjectId.value);
-        if (found) return found;
-    }
-    return props.projects?.[0] ?? null;
+// Batasi preview proyek di landing page maksimal 3 proyek teratas
+const displayedProjects = computed(() => {
+    return (props.projects || []).slice(0, 3);
 });
 
 // Fallback image untuk spotlight project
@@ -184,7 +178,7 @@ const teamThemes = [
 const form = useForm({
     name: '',
     company: '',
-    service: 'Pembangunan & Konstruksi Sipil',
+    service_id: props.services?.[0]?.id ?? null,
     message: '',
 });
 
@@ -203,48 +197,7 @@ const submit = () => {
 
     <div class="bg-white text-zinc-900 selection:bg-orange-500 selection:text-white">
         <!-- BEGIN: MainHeader -->
-        <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-zinc-200">
-            <div class="max-w-[1440px] mx-auto px-6 md:px-10 h-20 flex items-center justify-between">
-                <!-- Company Brand Identity -->
-                <a aria-label="Beranda PT Hariq Sakti Konstruksindo" class="flex items-center group" href="#">
-                    <img src="/img/logo.jpeg" alt="PT. Hariq Sakti Konstruksindo" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-                </a>
-
-                <!-- Primary Navigation Links -->
-                <nav aria-label="Navigasi Utama" class="hidden md:flex items-center gap-8 lg:gap-10 text-xs font-bold tracking-wider uppercase text-zinc-800">
-                    <a class="hover:text-brand-orange transition-colors" href="#layanan">LAYANAN</a>
-                    <a class="hover:text-brand-orange transition-colors" href="#proyek">PROYEK</a>
-                    <a class="hover:text-brand-orange transition-colors" href="#artikel">ARTIKEL</a>
-                    <a class="hover:text-brand-orange transition-colors" href="#tim">TIM</a>
-                    <a class="hover:text-brand-orange transition-colors" href="#kontak">KONTAK</a>
-                </nav>
-
-                <!-- Action Consultation Button & Mobile Toggle -->
-                <div class="flex items-center gap-4">
-                    <a class="hidden sm:inline-flex items-center justify-center text-xs font-bold uppercase tracking-wider px-5 py-3 border border-zinc-900 hover:bg-zinc-900 hover:text-white transition-all duration-200" href="#kontak">
-                        KONSULTASI GRATIS
-                    </a>
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Buka Menu" class="inline-flex md:hidden p-2 text-zinc-900 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path v-if="!mobileMenuOpen" d="M4 6h16M4 12h16m-7 6h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                            <path v-else d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mobile Nav Dropdown -->
-            <div v-if="mobileMenuOpen" class="md:hidden border-b border-zinc-200 bg-white px-6 py-5 flex flex-col gap-4 text-xs font-bold tracking-wider uppercase shadow-md animate-fadeIn">
-                <a @click="mobileMenuOpen = false" class="hover:text-brand-orange py-1" href="#layanan">LAYANAN</a>
-                <a @click="mobileMenuOpen = false" class="hover:text-brand-orange py-1" href="#proyek">PROYEK</a>
-                <a @click="mobileMenuOpen = false" class="hover:text-brand-orange py-1" href="#artikel">ARTIKEL</a>
-                <a @click="mobileMenuOpen = false" class="hover:text-brand-orange py-1" href="#tim">TIM</a>
-                <a @click="mobileMenuOpen = false" class="hover:text-brand-orange py-1" href="#kontak">KONTAK</a>
-                <a @click="mobileMenuOpen = false" class="inline-flex items-center justify-center text-xs font-bold uppercase tracking-wider px-5 py-3 bg-zinc-950 text-white mt-2" href="#kontak">
-                    KONSULTASI GRATIS
-                </a>
-            </div>
-        </header>
+        <Navbar :company-settings="company_settings" />
         <!-- END: MainHeader -->
 
         <!-- BEGIN: HeroSection -->
@@ -252,147 +205,142 @@ const submit = () => {
         <!-- END: HeroSection -->
 
         <!-- Klien (Marquee) -->
-        <section class="relative overflow-hidden border-b-2 border-zinc-900 py-10 bg-zinc-50 flex items-center">
-            <!-- Fade edges agar ujung layarnya memudar -->
-            <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 md:w-32 bg-gradient-to-r from-zinc-50 to-transparent"></div>
-            <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 md:w-32 bg-gradient-to-l from-zinc-50 to-transparent"></div>
-            
-            <div class="flex w-max animate-marquee items-center gap-16 pl-16 hover:[animation-play-state:paused]">
-                <template v-for="n in 12" :key="n">
-                    <template v-for="c in clients" :key="`${n}-${c.id}`">
-                        <img v-if="c.logo" :src="c.logo" :alt="c.name"
-                            class="h-12 w-auto opacity-50 grayscale transition-all duration-300 hover:scale-110 hover:opacity-100 hover:grayscale-0" />
-                        <span v-else class="font-display font-bold text-sm tracking-wider uppercase text-zinc-400 hover:text-brand-orange transition-colors">
-                            {{ c.name }}
-                        </span>
+        <section class="relative overflow-hidden border-b border-zinc-200 py-10 bg-zinc-50 flex flex-col justify-center gap-5">
+            <div class="max-w-[1440px] mx-auto px-6 md:px-10 w-full flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-brand-orange animate-pulse"></span>
+                    <span class="text-xs font-mono tracking-widest uppercase text-zinc-600 font-bold">
+                        DIPERCAYA OLEH KORPORASI & MITRA STRATEGIS TERKEMUKA
+                    </span>
+                </div>
+                <span class="text-xs font-mono text-zinc-400 hidden sm:inline-block">
+                    KOLABORASI BERKELANJUTAN & MUTU TERJAMIN
+                </span>
+            </div>
+
+            <!-- Fade edges agar ujung layarnya memudar halus -->
+            <div class="relative w-full overflow-hidden flex items-center">
+                <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 md:w-40 bg-gradient-to-r from-zinc-50 to-transparent"></div>
+                <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 md:w-40 bg-gradient-to-l from-zinc-50 to-transparent"></div>
+                
+                <div class="flex w-max animate-marquee items-center gap-8 pl-8 hover:[animation-play-state:paused]">
+                    <template v-for="n in 8" :key="n">
+                        <template v-for="c in clients" :key="`${n}-${c.id}`">
+                            <div v-if="c.logo"
+                                class="h-16 px-6 py-2.5 bg-white rounded-xl border border-zinc-200/90 shadow-sm flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-brand-orange/40 flex-shrink-0">
+                                <img :src="c.logo" :alt="c.name"
+                                    class="h-9 w-auto max-w-[140px] object-contain transition-transform duration-300" />
+                            </div>
+                            <div v-else
+                                class="h-16 px-6 py-2.5 rounded-xl bg-white border border-zinc-200/90 shadow-sm flex items-center justify-center text-sm font-display font-bold text-zinc-800 tracking-wider uppercase hover:border-brand-orange hover:text-brand-orange transition-colors flex-shrink-0">
+                                {{ c.name }}
+                            </div>
+                        </template>
                     </template>
-                </template>
+                </div>
             </div>
         </section>
         <!-- END: Klien (Marquee) -->
 
         <!-- BEGIN: ServicesSection -->
-        <BentoServices :services="services" />
+        <BentoServices :services="services" @select-service="(id: number) => { form.service_id = id; }" />
         <!-- END: ServicesSection -->
 
         <!-- BEGIN: PortfolioSection -->
         <section class="py-24 border-b border-zinc-200 bg-zinc-50" id="proyek">
             <div class="max-w-[1440px] mx-auto px-6 md:px-10">
                 <!-- Section Header -->
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
                     <div>
-                        <span class="text-xs uppercase tracking-widest font-bold text-brand-orange">DOKUMENTASI REKAM JEJAK</span>
-                        <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-zinc-950 mt-2">
-                            KARYA TERPILIH
+                        <span class="text-xs uppercase tracking-widest font-bold text-orange-600 font-mono">DOKUMENTASI REKAM JEJAK</span>
+                        <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-zinc-950 mt-3 headline-tight">
+                            PROYEK <br>
+                            KAMI
                         </h2>
                     </div>
-
-                    <!-- Filter Tabs -->
-                    <div class="flex flex-wrap gap-2 text-xs font-bold uppercase tracking-wider">
-                        <button @click="selectedCategory = 'Semua Proyek'"
-                            class="px-4 py-2 rounded shadow-sm font-bold transition-colors"
-                            :class="selectedCategory === 'Semua Proyek' ? 'bg-brand-orange text-white' : 'bg-white border border-zinc-200 text-zinc-700 hover:bg-zinc-100'">
-                            Semua Proyek ({{ company_settings?.projects_done ?? '250+' }})
-                        </button>
-                        <button @click="selectedCategory = 'Pendidikan & Kampus'"
-                            class="px-4 py-2 rounded font-bold transition-colors"
-                            :class="selectedCategory === 'Pendidikan & Kampus' ? 'bg-brand-orange text-white' : 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-600 hover:text-white'">
-                            Pendidikan & Kampus
-                        </button>
-                        <button @click="selectedCategory = 'Komersial & Perkantoran'"
-                            class="px-4 py-2 rounded font-bold transition-colors"
-                            :class="selectedCategory === 'Komersial & Perkantoran' ? 'bg-brand-orange text-white' : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-600 hover:text-white'">
-                            Komersial & Perkantoran
-                        </button>
-                        <button @click="selectedCategory = 'Industri & Gudang Logistik'"
-                            class="px-4 py-2 rounded font-bold transition-colors"
-                            :class="selectedCategory === 'Industri & Gudang Logistik' ? 'bg-brand-orange text-white' : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-600 hover:text-white'">
-                            Industri & Gudang Logistik
-                        </button>
+                    <div class="max-w-md lg:pb-2">
+                        <p class="text-zinc-600 text-sm sm:text-base leading-relaxed">
+                            Dedikasi presisi struktur sipil, arsitektural, dan MEP pada berbagai sektor pembangunan dengan standar mutu dan keselamatan kerja tinggi.
+                        </p>
                     </div>
                 </div>
 
-                <!-- Main Project Spotlight Card -->
-                <div v-if="activeProject" class="bg-white border border-zinc-200 p-6 md:p-10 mb-8 shadow-sm">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                        <div class="lg:col-span-8 overflow-hidden border border-zinc-200 bg-zinc-100">
-                            <img :src="activeProject.image || fallbackProjectImage"
-                                :alt="activeProject.title"
-                                class="w-full h-[400px] sm:h-[520px] object-cover hover:scale-102 transition-transform duration-500" />
-                        </div>
-
-                        <div class="lg:col-span-4 flex flex-col justify-between h-full space-y-6">
-                            <div>
-                                <div class="flex items-center gap-2 text-xs font-mono mb-3">
-                                    <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">
-                                        SELESAI {{ activeProject.year ?? '2025' }}
+                <!-- Projects Grid: 3 Clean Cards (Matching Layanan & Artikel) -->
+                <div v-if="displayedProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <article
+                        v-for="(p, idx) in displayedProjects"
+                        :key="p.id"
+                        class="group bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5 hover:border-orange-500/60"
+                    >
+                        <div>
+                            <!-- Project Image (FULL COLOR, ZERO GRAYSCALE) -->
+                            <div class="aspect-[16/10] overflow-hidden bg-zinc-100 relative">
+                                <img
+                                    :src="p.image || fallbackProjectImage"
+                                    :alt="p.title"
+                                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                />
+                                <!-- Badges on Image -->
+                                <div class="absolute top-3 left-3 flex items-center gap-2">
+                                    <span class="px-2.5 py-1 text-[11px] font-mono font-bold rounded-md bg-zinc-950/85 text-white backdrop-blur-sm shadow-sm">
+                                        0{{ idx + 1 }}
                                     </span>
-                                    <span class="text-zinc-300">/</span>
-                                    <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold border border-blue-200 uppercase">
-                                        {{ activeProject.category ?? 'GEDUNG TINGKAT 8 LANTAI' }}
+                                    <span v-if="p.year" class="px-2.5 py-1 text-[10px] font-mono font-bold rounded-md bg-orange-600 text-white shadow-sm">
+                                        SELESAI {{ p.year }}
                                     </span>
                                 </div>
-
-                                <h3 class="text-3xl font-display font-bold text-zinc-950 mb-3">
-                                    {{ activeProject.title }}
-                                </h3>
-
-                                <p class="text-zinc-600 text-sm leading-relaxed mb-6">
-                                    {{ activeProject.description ?? 'Proyek konstruksi struktur beton 8 lantai dengan fasad louvre arsitektural modern, sistem proteksi kebakaran terintegrasi, dan penyediaan fasilitas MEP ramah energi bersertifikat ramah lingkungan.' }}
-                                </p>
-
-                                <dl class="space-y-2.5 text-xs border-t border-b border-zinc-200 py-4 font-mono bg-zinc-50/70 p-3 rounded">
-                                    <div class="flex justify-between items-center">
-                                        <dt class="text-zinc-500 font-bold">KLIEN UTAMA:</dt>
-                                        <dd class="text-blue-900 font-bold px-2 py-0.5 bg-blue-50 rounded border border-blue-200">
-                                            {{ activeProject.client_name ?? 'Yayasan Pendidikan Nasional' }}
-                                        </dd>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <dt class="text-zinc-500 font-bold">LINGKUP KERJA:</dt>
-                                        <dd class="text-amber-900 font-bold px-2 py-0.5 bg-amber-50 rounded border border-amber-200">
-                                            Struktur Sipil, MEP, Fasad
-                                        </dd>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <dt class="text-zinc-500 font-bold">LUAS BANGUNAN:</dt>
-                                        <dd class="text-emerald-900 font-bold px-2 py-0.5 bg-emerald-50 rounded border border-emerald-200">
-                                            14.800 m²
-                                        </dd>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <dt class="text-zinc-500 font-bold">STATUS K3:</dt>
-                                        <dd class="text-emerald-700 font-bold flex items-center gap-1">
-                                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>Nol Kecelakaan (Zero LTI)
-                                        </dd>
-                                    </div>
-                                </dl>
                             </div>
 
-                            <a class="inline-flex items-center justify-between w-full p-4 bg-brand-orange text-white font-bold text-xs uppercase tracking-wider hover:bg-zinc-950 transition-colors shadow-md rounded" href="#kontak">
-                                <span>DETAIL STUDI KASUS & SPESIFIKASI</span>
-                                <span class="text-base">→</span>
-                            </a>
+                            <!-- Content -->
+                            <div class="p-6 sm:p-7">
+                                <span v-if="p.client_name" class="text-xs font-mono uppercase text-orange-600 font-bold block mb-2">
+                                    {{ p.client_name }}
+                                </span>
+                                <h3 class="text-xl sm:text-2xl font-display font-bold text-zinc-950 group-hover:text-orange-600 transition-colors leading-snug mb-3 capitalize">
+                                    {{ p.title }}
+                                </h3>
+                                <p class="text-xs sm:text-sm text-zinc-600 leading-relaxed line-clamp-3">
+                                    {{ p.description }}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+
+                        <!-- Card Footer -->
+                        <div class="p-6 sm:p-7 pt-0 mt-auto">
+                            <div class="pt-4 border-t border-zinc-100 flex items-center justify-between">
+                                <a
+                                    href="#kontak"
+                                    class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600 hover:text-zinc-950 transition-colors"
+                                >
+                                    <span>Konsultasi Proyek Serupa</span>
+                                    <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
                 </div>
 
-                <!-- Secondary Projects List if available in DB -->
-                <div v-if="projects && projects.length > 1" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-                    <div v-for="p in projects" :key="p.id"
-                        @click="activeProjectId = p.id"
-                        class="cursor-pointer border-2 p-4 bg-white transition-all duration-300 hover:shadow-lg rounded"
-                        :class="activeProject?.id === p.id ? 'border-brand-orange ring-2 ring-brand-orange/30' : 'border-zinc-200 hover:border-zinc-400'">
-                        <div class="aspect-[16/10] overflow-hidden rounded bg-zinc-100 mb-3">
-                            <img :src="p.image || fallbackProjectImage" :alt="p.title"
-                                class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-                        </div>
-                        <div class="flex items-center justify-between text-xs text-zinc-500 font-mono mb-1">
-                            <span>{{ p.client_name ?? 'Klien' }}</span>
-                            <span v-if="p.year">{{ p.year }}</span>
-                        </div>
-                        <h4 class="font-display font-bold text-base text-zinc-900">{{ p.title }}</h4>
+                <!-- Empty State (Jika belum ada data sama sekali) -->
+                <div v-else class="text-center py-16 bg-white border border-zinc-200 rounded-2xl p-8">
+                    <p class="text-zinc-500 text-sm">Belum ada dokumentasi proyek yang dipublikasikan.</p>
+                </div>
+
+                <!-- CTA: Lihat Semua Proyek -->
+                <div class="mt-14 pt-8 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-6 bg-white p-6 md:p-8 rounded-2xl border border-zinc-200/80 shadow-sm">
+                    <div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-orange-600">DOKUMENTASI LENGKAP</span>
+                        <h3 class="text-xl sm:text-2xl font-display font-bold text-zinc-950 mt-1">
+                            Jelajahi Seluruh Portofolio Proyek
+                        </h3>
+                        <p class="text-zinc-600 text-sm mt-1 max-w-xl">
+                            Temukan studi kasus komprehensif, spesifikasi teknis bangunan, dan rekam jejak pekerjaan kami di berbagai wilayah.
+                        </p>
                     </div>
+                    <Link href="/proyek"
+                        class="inline-flex items-center gap-3 px-7 py-4 bg-zinc-950 hover:bg-orange-600 text-white font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-md hover:shadow-xl group flex-shrink-0">
+                        <span>LIHAT SEMUA PROYEK</span>
+                        <span class="text-base group-hover:translate-x-1 transition-transform">→</span>
+                    </Link>
                 </div>
             </div>
         </section>
@@ -401,54 +349,53 @@ const submit = () => {
         <!-- BEGIN: FieldNotesSection (Artikel) -->
         <section class="py-24 border-b border-zinc-200 bg-white" id="artikel">
             <div class="max-w-[1440px] mx-auto px-6 md:px-10">
-                <div class="mb-12">
-                    <span class="text-xs uppercase tracking-widest font-bold text-brand-orange">INSIGHT • PUBLIKASI RESMI</span>
-                    <h2 class="text-4xl sm:text-5xl font-display font-extrabold text-zinc-950 mt-2">
-                        CATATAN LAPANGAN
-                    </h2>
+                <!-- Section Header -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest font-bold text-brand-orange font-mono">PUBLIKASI & INSIGHT RESMI</span>
+                        <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-zinc-950 mt-2">
+                            ARTIKEL KAMI
+                        </h2>
+                    </div>
+                    <div class="max-w-md">
+                        <p class="text-zinc-600 text-sm leading-relaxed">
+                            Wawasan teknis konstruksi sipil, metode arsitektural, standar audit mutu K3, dan berita terbaru dari tim profesional kami.
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Articles Ledger Table List -->
                 <div class="border-t border-zinc-900">
-                    <article v-for="(post, idx) in posts" :key="post.id"
+                    <article v-for="(post, idx) in (posts || []).slice(0, 3)" :key="post.id"
                         class="group py-8 border-b border-zinc-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-colors px-3 rounded-lg"
                         :class="postThemes[idx % postThemes.length].hoverBg">
                         <!-- Date & Category -->
                         <div class="flex flex-col gap-1 w-32 flex-shrink-0">
-                            <span class="px-2.5 py-1 text-[11px] font-mono font-bold rounded w-fit uppercase"
+                            <span v-if="post.category" class="px-2.5 py-1 text-[11px] font-mono font-bold rounded w-fit uppercase"
                                 :class="postThemes[idx % postThemes.length].pillBg">
-                                {{ post.category || 'CIVIL WORKS' }}
+                                {{ post.category }}
                             </span>
                             <span class="text-xs font-mono font-medium text-zinc-500">
                                 {{ post.published_at || 'Terbaru' }}
                             </span>
                         </div>
 
-                        <!-- Thumbnail -->
-                        <a :href="`/artikel/${post.slug}`" class="w-24 h-20 flex-shrink-0 overflow-hidden bg-zinc-100 border-2 rounded transition-colors block"
+                        <!-- Thumbnail (Full Color, No Grayscale) -->
+                        <Link :href="`/artikel/${post.slug}`" class="w-24 h-20 flex-shrink-0 overflow-hidden bg-zinc-100 border-2 rounded transition-colors block"
                             :class="postThemes[idx % postThemes.length].border">
                             <img :src="post.thumbnail || postThemes[idx % postThemes.length].fallbackImg"
                                 :alt="post.title"
-                                class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-110 transition-transform duration-300" />
-                        </a>
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                        </Link>
 
                         <!-- Title and Specs -->
                         <div class="flex-grow max-w-xl">
-                            <a :href="`/artikel/${post.slug}`">
+                            <Link :href="`/artikel/${post.slug}`">
                                 <h3 class="text-lg md:text-xl font-display font-bold text-zinc-950 transition-colors"
                                     :class="postThemes[idx % postThemes.length].titleHover">
                                     {{ post.title }}
                                 </h3>
-                            </a>
-                            <div class="flex items-center gap-2 mt-1.5">
-                                <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 text-zinc-700 font-semibold">
-                                    {{ postThemes[idx % postThemes.length].badge1 }}
-                                </span>
-                                <span class="text-[11px] font-mono px-2 py-0.5 rounded font-semibold"
-                                    :class="postThemes[idx % postThemes.length].badge2Class">
-                                    {{ postThemes[idx % postThemes.length].badge2 }}
-                                </span>
-                            </div>
+                            </Link>
                         </div>
 
                         <!-- Excerpt -->
@@ -457,12 +404,30 @@ const submit = () => {
                         </div>
 
                         <!-- Action Arrow Button -->
-                        <a :href="`/artikel/${post.slug}`"
+                        <Link :href="`/artikel/${post.slug}`"
                             class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-base transition-all flex-shrink-0"
                             :class="postThemes[idx % postThemes.length].arrowBtn">
                             →
-                        </a>
+                        </Link>
                     </article>
+                </div>
+
+                <!-- CTA: Lihat Semua Artikel -->
+                <div class="mt-14 pt-8 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-6 bg-zinc-50 p-6 md:p-8 rounded-2xl border border-zinc-200">
+                    <div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-brand-orange">ARSIP LENGKAP</span>
+                        <h3 class="text-xl sm:text-2xl font-display font-bold text-zinc-950 mt-1">
+                            Ingin Membaca Artikel Lainnya?
+                        </h3>
+                        <p class="text-zinc-600 text-sm mt-1 max-w-xl">
+                            Pelajari metode konstruksi sipil, standar audit mutu K3, dan analisis teknologi teknik terbaru kami.
+                        </p>
+                    </div>
+                    <Link href="/artikel"
+                        class="inline-flex items-center gap-3 px-7 py-4 bg-brand-orange hover:bg-zinc-950 text-white font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-md hover:shadow-xl group flex-shrink-0">
+                        <span>LIHAT SEMUA ARTIKEL</span>
+                        <span class="text-base group-hover:translate-x-1 transition-transform">→</span>
+                    </Link>
                 </div>
             </div>
         </section>
@@ -485,14 +450,14 @@ const submit = () => {
 
                 <!-- Team Members Showcase Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-                    <div v-for="(t, idx) in teams" :key="t.id"
+                    <div v-for="(t, idx) in (teams || []).slice(0, 4)" :key="t.id"
                         class="p-6 md:p-8 bg-zinc-900/80 rounded-lg transition-all shadow-lg group"
                         :class="teamThemes[idx % teamThemes.length].borderClass">
-                        <!-- Photo Frame -->
+                        <!-- Photo Frame (Full Color, No Grayscale) -->
                         <div class="aspect-[4/3] w-full overflow-hidden bg-zinc-950 mb-6 border border-zinc-800 rounded relative">
                             <img :src="t.photo || teamThemes[idx % teamThemes.length].fallbackPhoto"
                                 :alt="t.name"
-                                class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-transform duration-500" />
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             <div class="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-mono font-bold rounded"
                                 :class="teamThemes[idx % teamThemes.length].tagClass">
                                 {{ teamThemes[idx % teamThemes.length].tagText }}
@@ -611,17 +576,16 @@ const submit = () => {
                             <!-- Field: Jenis Layanan -->
                             <div class="border-b border-zinc-300 pb-2 focus-within:border-brand-orange transition-colors">
                                 <label class="block text-xs uppercase font-bold tracking-wider text-zinc-500 mb-2" for="layanan-select">
-                                    Jenis Pekerjaan
+                                    Jenis Layanan
                                 </label>
-                                <select v-model="form.service"
-                                    class="w-full bg-transparent border-0 p-0 text-zinc-900 focus:ring-0 text-base font-medium"
-                                    id="layanan-select" name="layanan">
-                                    <option value="Pembangunan & Konstruksi Sipil">Pembangunan & Konstruksi Sipil</option>
-                                    <option value="Mekanikal, Elektrikal & Plumbing (MEP)">Mekanikal, Elektrikal & Plumbing (MEP)</option>
-                                    <option value="Pemeliharaan & Perbaikan Struktur">Pemeliharaan & Perbaikan Struktur</option>
-                                    <option value="Pengelolaan Lingkungan & K3">Pengelolaan Lingkungan & K3</option>
-                                    <option value="Konsultasi Desain & RAB Proyek">Konsultasi Desain & RAB Proyek</option>
+                                <select v-model="form.service_id"
+                                    class="w-full bg-transparent border-0 p-0 text-zinc-900 focus:ring-0 text-base font-medium capitalize cursor-pointer"
+                                    id="layanan-select" name="service_id">
+                                    <option v-for="s in services" :key="s.id" :value="s.id" class="text-zinc-900 capitalize">
+                                        {{ s.title }}
+                                    </option>
                                 </select>
+                                <p v-if="form.errors.service_id" class="mt-1 text-sm text-red-600">{{ form.errors.service_id }}</p>
                             </div>
 
                             <!-- Field: Detail Proyek -->
@@ -662,7 +626,7 @@ const submit = () => {
                 <div class="flex flex-wrap items-center gap-6 font-semibold uppercase tracking-wider text-zinc-700">
                     <a class="hover:text-brand-orange transition-colors" href="#layanan">Layanan</a>
                     <a class="hover:text-brand-orange transition-colors" href="#proyek">Proyek</a>
-                    <a class="hover:text-brand-orange transition-colors" href="#artikel">Catatan Lapangan</a>
+                    <a class="hover:text-brand-orange transition-colors" href="#artikel">Artikel</a>
                     <a class="hover:text-brand-orange transition-colors" href="#tim">Tim Ahli</a>
                     <a class="hover:text-brand-orange transition-colors" href="#kontak">Kontak</a>
                 </div>

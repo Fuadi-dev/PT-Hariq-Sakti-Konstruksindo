@@ -8,6 +8,8 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
 class ContactLeadsTable
@@ -17,25 +19,39 @@ class ContactLeadsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Nama')
-                    ->searchable(),
+                    ->label('Nama Pengirim')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('company')
-                    ->searchable(),
+                    ->label('Perusahaan / Instansi')
+                    ->searchable()
+                    ->placeholder('-'),
+                TextColumn::make('service.title')
+                    ->label('Jenis Layanan')
+                    ->badge()
+                    ->color('warning')
+                    ->placeholder('Layanan Umum')
+                    ->searchable()
+                    ->sortable(),
                 IconColumn::make('is_followed_up')
+                    ->label('Ditindak Lanjuti')
                     ->boolean(),
                 TextColumn::make('created_at')
-                    ->label('Dibuat Pada')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Diterima Pada')
+                    ->dateTime('d M Y, H:i')
+                    ->sortable(),
                 TextColumn::make('updated_at')
                     ->label('Diperbarui Pada')
-                    ->dateTime()
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('service_id')
+                    ->label('Filter Jenis Layanan')
+                    ->relationship('service', 'title'),
+                TernaryFilter::make('is_followed_up')
+                    ->label('Filter Status Tindak Lanjut'),
             ])
             ->recordActions([
                 EditAction::make(),

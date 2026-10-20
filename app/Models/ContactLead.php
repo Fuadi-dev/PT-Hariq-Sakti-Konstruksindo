@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ContactLead extends Model
 {
@@ -12,6 +13,7 @@ class ContactLead extends Model
     protected $fillable = [
         'name',
         'company',
+        'service_id',
         'message',
         'is_followed_up',
     ];
@@ -19,4 +21,9 @@ class ContactLead extends Model
     protected $casts = [
         'is_followed_up' => 'boolean',
     ];
+
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(Service::class);
+    }
 }

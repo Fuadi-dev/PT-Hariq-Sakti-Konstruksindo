@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscribers', function (Blueprint $table) {
-            $table->id();
-            $table->string('email')->unique();
-            $table->timestamps();
+        Schema::table('contact_leads', function (Blueprint $table) {
+            $table->foreignId('service_id')->nullable()->after('company')->constrained('services')->nullOnDelete();
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscribers');
+        Schema::table('contact_leads', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('service_id');
+        });
     }
 };

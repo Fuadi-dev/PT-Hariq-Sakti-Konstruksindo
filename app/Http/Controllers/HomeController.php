@@ -47,7 +47,7 @@ class HomeController extends Controller
                 'website_url' => $c->website_url,
             ]),
 
-            'projects' => Project::with(['images', 'client'])->latest('completion_date')->take(6)->get()->map(function ($p) {
+            'projects' => Project::with(['images', 'client'])->latest()->take(6)->get()->map(function ($p) {
                 $img = $p->images->firstWhere('is_primary', true) ?? $p->images->first();
 
                 return [
@@ -56,7 +56,6 @@ class HomeController extends Controller
                     'slug' => $p->slug,
                     'description' => $p->description,
                     'image' => $img ? $this->url($img->image_path) : null,
-                    'category' => $p->client?->name,
                     'client_name' => $p->client?->name,
                     'year' => $p->completion_date ? \Carbon\Carbon::parse($p->completion_date)->year : null,
                 ];

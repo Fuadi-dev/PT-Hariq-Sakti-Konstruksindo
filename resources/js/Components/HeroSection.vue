@@ -37,13 +37,19 @@ const slideItems = computed(() => {
 // Slider index & timer autoplay
 const currentIndex = ref(0);
 let timer: ReturnType<typeof setInterval> | undefined;
+const AUTO_SLIDE_DELAY = 4000; // 4 detik (standar auto-slide)
+
+const stepNext = () => {
+    if (slideItems.value.length === 0) return;
+    currentIndex.value = (currentIndex.value + 1) % slideItems.value.length;
+};
 
 const startAutoplay = () => {
     stopAutoplay();
     if (slideItems.value.length > 1) {
         timer = setInterval(() => {
-            nextSlide();
-        }, 5000);
+            stepNext();
+        }, AUTO_SLIDE_DELAY);
     }
 };
 
@@ -55,13 +61,14 @@ const stopAutoplay = () => {
 };
 
 const nextSlide = () => {
-    if (slideItems.value.length === 0) return;
-    currentIndex.value = (currentIndex.value + 1) % slideItems.value.length;
+    stepNext();
+    startAutoplay(); // Reset timer saat diklik manual
 };
 
 const prevSlide = () => {
     if (slideItems.value.length === 0) return;
     currentIndex.value = (currentIndex.value - 1 + slideItems.value.length) % slideItems.value.length;
+    startAutoplay(); // Reset timer saat diklik manual
 };
 
 const goToSlide = (i: number) => {
@@ -69,12 +76,22 @@ const goToSlide = (i: number) => {
     startAutoplay();
 };
 
+const handleVisibilityChange = () => {
+    if (document.hidden) {
+        stopAutoplay();
+    } else {
+        startAutoplay();
+    }
+};
+
 onMounted(() => {
     startAutoplay();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 });
 
 onBeforeUnmount(() => {
     stopAutoplay();
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
 });
 
 const currentSlide = computed(() => slideItems.value[currentIndex.value]);
@@ -83,9 +100,7 @@ const currentSlide = computed(() => slideItems.value[currentIndex.value]);
 <template>
     <section
         id="beranda"
-        class="relative w-full overflow-hidden border-b-2 border-zinc-900 bg-zinc-950 h-[calc(100vh-5rem)] min-h-[520px] sm:min-h-[580px] flex items-center justify-center select-none"
-        @mouseenter="stopAutoplay"
-        @mouseleave="startAutoplay"
+        class="relative w-full overflow-hidden border-b-2 border-zinc-900 bg-zinc-950 h-screen min-h-[600px] sm:min-h-[680px] flex items-center justify-center select-none pt-20"
     >
         <!-- Background Slider Images -->
         <div class="absolute inset-0 z-0">
@@ -102,8 +117,8 @@ const currentSlide = computed(() => slideItems.value[currentIndex.value]);
                     :class="i === currentIndex ? 'scale-105' : 'scale-100'"
                 />
             </div>
-            <!-- Dark Overlay with subtle gradient for optimal text contrast -->
-            <div class="absolute inset-0 bg-black/60 bg-gradient-to-t from-zinc-950/85 via-black/45 to-zinc-950/75 pointer-events-none"></div>
+            <!-- Dark Overlay: lighter and balanced so background image details are vibrant and clear -->
+            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/75 via-black/20 to-black/35 pointer-events-none"></div>
         </div>
 
         <!-- Centered Header Text (No CTA buttons as requested) -->

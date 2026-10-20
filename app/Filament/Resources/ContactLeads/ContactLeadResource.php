@@ -30,7 +30,9 @@ class ContactLeadResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedInboxArrowDown;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Leads & Marketing';
+    protected static string|\UnitEnum|null $navigationGroup = 'Pesan & Testimoni';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'name';
 

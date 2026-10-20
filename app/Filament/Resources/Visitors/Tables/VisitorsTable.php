@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Visitors\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -16,27 +16,29 @@ class VisitorsTable
         return $table
             ->columns([
                 TextColumn::make('ip_address')
-                    ->searchable(),
-                TextColumn::make('session_id')
+                    ->label('Alamat IP')
+                    ->badge()
+                    ->color('info')
                     ->searchable(),
                 TextColumn::make('visited_url')
+                    ->label('Halaman Dikunjungi')
                     ->searchable(),
+                TextColumn::make('session_id')
+                    ->label('ID Sesi')
+                    ->limit(15)
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
-                    ->label('Dibuat Pada')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->label('Diperbarui Pada')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Waktu Kunjungan')
+                    ->dateTime('d M Y, H:i:s')
+                    ->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                ViewAction::make(),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

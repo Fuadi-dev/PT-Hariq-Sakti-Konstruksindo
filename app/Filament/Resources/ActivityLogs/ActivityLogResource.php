@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\ActivityLogs;
 
-use App\Filament\Resources\ActivityLogs\Pages\CreateActivityLog;
-use App\Filament\Resources\ActivityLogs\Pages\EditActivityLog;
 use App\Filament\Resources\ActivityLogs\Pages\ListActivityLogs;
 use App\Filament\Resources\ActivityLogs\Schemas\ActivityLogForm;
 use App\Filament\Resources\ActivityLogs\Tables\ActivityLogsTable;
@@ -34,6 +32,11 @@ class ActivityLogResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'action_type';
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ActivityLogForm::configure($schema);
@@ -55,8 +58,6 @@ class ActivityLogResource extends Resource
     {
         return [
             'index' => ListActivityLogs::route('/'),
-            'create' => CreateActivityLog::route('/create'),
-            'edit' => EditActivityLog::route('/{record}/edit'),
         ];
     }
 }
