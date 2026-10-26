@@ -17,9 +17,10 @@ class ActivityLogSeeder extends Seeder
         // Bersihkan data lama jika ingin re-seed bersih
         ActivityLog::truncate();
 
-        $superadmin = User::where('role', 'superadmin')->first();
-        $admin = User::where('role', 'admin')->first() ?? $superadmin;
-        $writer = User::where('role', 'writer')->first() ?? $superadmin;
+        // Hanya ada satu peran (admin), sehingga semua log atas nama admin pertama
+        $superadmin = User::orderBy('id')->first();
+        $admin = $superadmin;
+        $writer = $superadmin;
 
         $logs = [
             [
@@ -117,7 +118,7 @@ class ActivityLogSeeder extends Seeder
                 'action_type' => 'updated',
                 'model_type' => 'App\Models\User',
                 'model_id' => $writer?->id ?? 1,
-                'description' => 'Memperbarui profil hak akses untuk akun Content Writer',
+                'description' => 'Memperbarui profil akun admin',
                 'created_at' => Carbon::now()->subHours(3),
                 'updated_at' => Carbon::now()->subHours(3),
             ],

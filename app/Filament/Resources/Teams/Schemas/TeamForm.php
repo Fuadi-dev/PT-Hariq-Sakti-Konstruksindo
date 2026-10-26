@@ -15,16 +15,11 @@ class TeamForm
                 TextInput::make('name')
                     ->label('Nama')
                     ->required(),
-                TextInput::make('position')
-                    ->label('Jabatan'),
                 FileUpload::make('photo')
                     ->label('Foto')
                     ->image()
                     ->disk('public')
                     ->directory('teams'),
-                TextInput::make('linkedin_url')
-                    ->label('URL LinkedIn')
-                    ->url(),
             ]);
     }
 }

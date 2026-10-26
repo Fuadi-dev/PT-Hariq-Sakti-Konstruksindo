@@ -20,9 +20,6 @@ class ClientForm
                     ->image()
                     ->disk('public')
                     ->directory('clients'),
-                TextInput::make('website_url')
-                    ->label('URL Website')
-                    ->url(),
             ]);
     }
 }

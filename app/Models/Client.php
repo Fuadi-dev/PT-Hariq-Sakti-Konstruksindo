@@ -12,7 +12,6 @@ class Client extends Model
     protected $fillable = [
         'name',
         'logo',
-        'website_url',
     ];
 
     public function projects()

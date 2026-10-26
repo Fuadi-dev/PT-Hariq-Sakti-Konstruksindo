@@ -11,8 +11,6 @@ class Team extends Model
 
     protected $fillable = [
         'name',
-        'position',
         'photo',
-        'linkedin_url',
     ];
 }

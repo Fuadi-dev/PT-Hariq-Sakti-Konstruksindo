@@ -19,7 +19,6 @@ class ActivityLogObserver
         'Category' => 'Kategori',
         'Client' => 'Klien',
         'ContactLead' => 'Pesan Masuk',
-        'Page' => 'Halaman',
         'Post' => 'Artikel',
         'Project' => 'Proyek',
         'ProjectImage' => 'Gambar Proyek',

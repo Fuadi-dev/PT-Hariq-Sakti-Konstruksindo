@@ -6,7 +6,6 @@ use App\Models\ActivityLog;
 use App\Models\Category;
 use App\Models\Client;
 use App\Models\ContactLead;
-use App\Models\Page;
 use App\Models\Post;
 use App\Models\Project;
 use App\Models\ProjectImage;
@@ -42,9 +41,9 @@ class AppServiceProvider extends ServiceProvider
 
         // Log aktivitas admin panel untuk seluruh model konten
         foreach ([
-            Category::class, Client::class, ContactLead::class, Page::class,
-            Post::class, Project::class, ProjectImage::class, Service::class,
-            Setting::class, Slider::class, Team::class, Testimonial::class, User::class,
+            Category::class, Client::class, ContactLead::class, Post::class,
+            Project::class, ProjectImage::class, Service::class, Setting::class,
+            Slider::class, Team::class, Testimonial::class, User::class,
         ] as $model) {
             $model::observe(ActivityLogObserver::class);
         }

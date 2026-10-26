@@ -5,7 +5,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 const props = defineProps<{
     settings?: Record<string, any>;
     projects?: Array<{ id: number; title: string; image?: string | null; category?: string | null; year?: string | number | null }>;
-    sliders?: Array<{ id: number; title: string; subtitle?: string | null; image: string; button_text?: string | null; button_url?: string | null }>;
+    sliders?: Array<{ id: number; title: string; image: string }>;
 }>();
 
 // Daftar slide: gunakan sliders dari database atau fallback ke gambar proyek
@@ -19,7 +19,6 @@ const slideItems = computed(() => {
             return withImg.map((p) => ({
                 id: p.id,
                 title: p.title,
-                subtitle: p.category ?? null,
                 image: p.image as string,
             }));
         }
@@ -28,7 +27,6 @@ const slideItems = computed(() => {
         {
             id: 0,
             title: 'PT Hariq Sakti Konstruksindo',
-            subtitle: null,
             image: '/storage/sliders/J6OL5YFQ1Nd9R6931m2cblM0zaOZUv0jhN24f4Vw.jpg',
         },
     ];

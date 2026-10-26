@@ -22,9 +22,6 @@ class ClientsTable
                 ImageColumn::make('logo')
                     ->label('Logo')
                     ->disk('public'),
-                TextColumn::make('website_url')
-                    ->label('URL Website')
-                    ->searchable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime()

@@ -23,12 +23,6 @@ class SlidersTable
                 ImageColumn::make('image_path')
                     ->label('Gambar')
                     ->disk('public'),
-                TextColumn::make('button_text')
-                    ->label('Teks Tombol')
-                    ->searchable(),
-                TextColumn::make('button_url')
-                    ->label('URL Tombol')
-                    ->searchable(),
                 TextColumn::make('order')
                     ->label('Urutan')
                     ->numeric()

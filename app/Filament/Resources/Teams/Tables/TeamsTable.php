@@ -19,15 +19,9 @@ class TeamsTable
                 TextColumn::make('name')
                     ->label('Nama')
                     ->searchable(),
-                TextColumn::make('position')
-                    ->label('Jabatan')
-                    ->searchable(),
                 ImageColumn::make('photo')
                     ->label('Foto')
                     ->disk('public'),
-                TextColumn::make('linkedin_url')
-                    ->label('URL LinkedIn')
-                    ->searchable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime()

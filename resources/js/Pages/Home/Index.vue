@@ -4,6 +4,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import Navbar from '@/Components/Navbar.vue';
 import HeroSection from '@/Components/HeroSection.vue';
 import BentoServices from '@/Components/BentoServices.vue';
+import AutoZoomLogo from '@/Components/AutoZoomLogo.vue';
 
 interface ProjectItem {
     id: number;
@@ -38,24 +39,18 @@ interface ClientItem {
     id: number;
     name: string;
     logo?: string | null;
-    website_url?: string | null;
 }
 
 interface TeamItem {
     id: number;
     name: string;
-    position?: string | null;
     photo?: string | null;
-    linkedin_url?: string | null;
 }
 
 interface SliderItem {
     id: number;
     title: string;
-    subtitle?: string | null;
     image: string;
-    button_text?: string | null;
-    button_url?: string | null;
 }
 
 const props = defineProps<{
@@ -223,16 +218,16 @@ const submit = () => {
                 <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 md:w-40 bg-gradient-to-r from-zinc-50 to-transparent"></div>
                 <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 md:w-40 bg-gradient-to-l from-zinc-50 to-transparent"></div>
                 
-                <div class="flex w-max animate-marquee items-center gap-8 pl-8 hover:[animation-play-state:paused]">
+                <div class="flex w-max animate-marquee items-center gap-8 pl-8 py-4 hover:[animation-play-state:paused]">
                     <template v-for="n in 8" :key="n">
                         <template v-for="c in clients" :key="`${n}-${c.id}`">
                             <div v-if="c.logo"
-                                class="h-16 px-6 py-2.5 bg-white rounded-xl border border-zinc-200/90 shadow-sm flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-brand-orange/40 flex-shrink-0">
-                                <img :src="c.logo" :alt="c.name"
-                                    class="h-9 w-auto max-w-[140px] object-contain transition-transform duration-300" />
+                                class="h-20 w-36 px-4 py-3 bg-white rounded-xl border border-zinc-200/90 shadow-sm flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-brand-orange/40 flex-shrink-0">
+                                <AutoZoomLogo :src="c.logo" :alt="c.name"
+                                    class="max-h-full max-w-full w-auto h-auto object-contain" />
                             </div>
                             <div v-else
-                                class="h-16 px-6 py-2.5 rounded-xl bg-white border border-zinc-200/90 shadow-sm flex items-center justify-center text-sm font-display font-bold text-zinc-800 tracking-wider uppercase hover:border-brand-orange hover:text-brand-orange transition-colors flex-shrink-0">
+                                class="h-20 px-6 py-3 rounded-xl bg-white border border-zinc-200/90 shadow-sm flex items-center justify-center text-sm font-display font-bold text-zinc-800 tracking-wider uppercase hover:border-brand-orange hover:text-brand-orange transition-colors flex-shrink-0">
                                 {{ c.name }}
                             </div>
                         </template>
@@ -336,7 +331,7 @@ const submit = () => {
                             Temukan studi kasus komprehensif, spesifikasi teknis bangunan, dan rekam jejak pekerjaan kami di berbagai wilayah.
                         </p>
                     </div>
-                    <Link href="/proyek"
+                    <Link href="#"
                         class="inline-flex items-center gap-3 px-7 py-4 bg-zinc-950 hover:bg-orange-600 text-white font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-md hover:shadow-xl group flex-shrink-0">
                         <span>LIHAT SEMUA PROYEK</span>
                         <span class="text-base group-hover:translate-x-1 transition-transform">→</span>
@@ -478,7 +473,7 @@ const submit = () => {
 
                         <!-- Bio / Description -->
                         <p class="text-xs text-zinc-300 mt-2">
-                            {{ t.position ? t.position : teamThemes[idx % teamThemes.length].bio }}
+                            {{ teamThemes[idx % teamThemes.length].bio }}
                         </p>
 
                         <!-- Skill Tags -->
@@ -515,35 +510,38 @@ const submit = () => {
 
                         <!-- Direct Communication Channels -->
                         <div class="space-y-4 pt-4 border-t border-zinc-200 text-sm">
-                            <div class="p-3 rounded-lg bg-blue-50 border border-blue-200">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-                                    <p class="text-xs uppercase font-bold text-blue-900">Kantor Pusat & Workshop:</p>
+                            <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200 transition-all duration-200 hover:border-brand-orange/40 hover:bg-white hover:shadow-sm">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-brand-orange"></span>
+                                    <p class="text-xs font-mono uppercase font-bold tracking-wider text-zinc-600">Kantor Pusat & Workshop:</p>
                                 </div>
-                                <p class="font-medium text-zinc-900 text-xs sm:text-sm">
+                                <p class="font-medium text-zinc-900 text-xs sm:text-sm leading-relaxed">
                                     {{ company_settings?.address ?? 'Gedung Konstruksindo Center, Jl. Jend. Sudirman Kav. 52-53, Jakarta Selatan' }}
                                 </p>
                             </div>
 
-                            <div class="p-3 rounded-lg bg-amber-50 border border-amber-200">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="w-2 h-2 rounded-full bg-amber-600"></span>
-                                    <p class="text-xs uppercase font-bold text-amber-900">Email Penawaran & Tender:</p>
+                            <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200 transition-all duration-200 hover:border-brand-orange/40 hover:bg-white hover:shadow-sm">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-brand-orange"></span>
+                                    <p class="text-xs font-mono uppercase font-bold tracking-wider text-zinc-600">Email Penawaran & Tender:</p>
                                 </div>
-                                <p class="font-medium text-zinc-900 text-xs sm:text-sm font-mono">
+                                <a :href="'mailto:' + (company_settings?.email ?? 'proyek@hariqsakti.co.id')"
+                                    class="font-medium text-zinc-900 text-xs sm:text-sm font-mono hover:text-brand-orange transition-colors block">
                                     {{ company_settings?.email ?? 'proyek@hariqsakti.co.id' }}
-                                </p>
+                                </a>
                             </div>
 
-                            <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                                    <p class="text-xs uppercase font-bold text-emerald-900">Hotline WhatsApp & Estimasi Cepat:</p>
+                            <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200 transition-all duration-200 hover:border-brand-orange/40 hover:bg-white hover:shadow-sm">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+                                    <p class="text-xs font-mono uppercase font-bold tracking-wider text-zinc-600">Hotline WhatsApp & Estimasi Cepat:</p>
                                 </div>
-                                <p class="font-bold text-emerald-800 text-xs sm:text-sm font-mono">
+                                <a :href="'https://wa.me/' + (company_settings?.whatsapp ? company_settings.whatsapp.replace(/[^0-9]/g, '') : '6281288992026')"
+                                    target="_blank" rel="noopener noreferrer"
+                                    class="font-bold text-zinc-950 text-xs sm:text-sm font-mono hover:text-brand-orange transition-colors block">
                                     {{ company_settings?.whatsapp ?? '+62 812-8899-2026 / +62 21-5544-3210' }}
-                                </p>
-                                <span class="text-[11px] text-emerald-700 font-medium block mt-0.5">Respon dalam 1 Jam Kerja</span>
+                                </a>
+                                <span class="text-[11px] font-mono text-zinc-500 block mt-1">Respon dalam 1 Jam Kerja</span>
                             </div>
                         </div>
                     </div>

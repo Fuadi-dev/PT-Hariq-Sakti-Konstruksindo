@@ -26,10 +26,7 @@ class HomeController extends Controller
             'sliders' => Slider::where('is_active', true)->orderBy('order')->get()->map(fn ($s) => [
                 'id' => $s->id,
                 'title' => $s->title,
-                'subtitle' => $s->subtitle,
                 'image' => $this->url($s->image_path),
-                'button_text' => $s->button_text,
-                'button_url' => $s->button_url,
             ]),
 
             'services' => Service::latest()->get()->map(fn ($s) => [
@@ -44,7 +41,6 @@ class HomeController extends Controller
                 'id' => $c->id,
                 'name' => $c->name,
                 'logo' => $c->logo ? $this->url($c->logo) : null,
-                'website_url' => $c->website_url,
             ]),
 
             'projects' => Project::with(['images', 'client'])->latest()->take(6)->get()->map(function ($p) {
@@ -82,9 +78,7 @@ class HomeController extends Controller
             'teams' => \App\Models\Team::all()->map(fn ($t) => [
                 'id' => $t->id,
                 'name' => $t->name,
-                'position' => $t->position,
                 'photo' => $t->photo ? $this->url($t->photo) : null,
-                'linkedin_url' => $t->linkedin_url,
             ]),
         ]);
     }
