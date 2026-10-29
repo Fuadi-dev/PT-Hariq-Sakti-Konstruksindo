@@ -331,7 +331,7 @@ const submit = () => {
                             Temukan studi kasus komprehensif, spesifikasi teknis bangunan, dan rekam jejak pekerjaan kami di berbagai wilayah.
                         </p>
                     </div>
-                    <Link href="#"
+                    <Link href="/proyek"
                         class="inline-flex items-center gap-3 px-7 py-4 bg-zinc-950 hover:bg-orange-600 text-white font-display font-bold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-md hover:shadow-xl group flex-shrink-0">
                         <span>LIHAT SEMUA PROYEK</span>
                         <span class="text-base group-hover:translate-x-1 transition-transform">→</span>
