@@ -29,7 +29,7 @@ class HomeController extends Controller
                 'image' => $this->url($s->image_path),
             ]),
 
-            'services' => Service::latest()->get()->map(fn ($s) => [
+            'services' => Service::oldest('id')->get()->map(fn ($s) => [
                 'id' => $s->id,
                 'title' => $s->title,
                 'slug' => $s->slug,

@@ -36,12 +36,26 @@ const props = defineProps<{
 }>();
 
 const searchQuery = ref(props.filters.q ?? '');
+let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
 const handleSearch = () => {
-    router.get('/proyek', { q: searchQuery.value }, {
-        preserveState: true,
-        replace: true,
-    });
+    if (debounceTimer) clearTimeout(debounceTimer);
+    router.get(
+        '/proyek',
+        { q: searchQuery.value || undefined },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+        }
+    );
+};
+
+const onSearchInput = () => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+        handleSearch();
+    }, 350);
 };
 
 const fallbackProjectImage =
@@ -85,6 +99,8 @@ const fallbackProjectImage =
                             <form @submit.prevent="handleSearch" class="relative">
                                 <input
                                     v-model="searchQuery"
+                                    @input="onSearchInput"
+                                    @change="handleSearch"
                                     type="text"
                                     placeholder="Cari proyek, gedung, klien..."
                                     class="w-full bg-zinc-900/90 text-white border border-zinc-700 rounded-lg pl-4 pr-24 py-3 text-xs sm:text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 placeholder-zinc-500"

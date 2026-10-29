@@ -12,7 +12,7 @@ class ServiceController extends Controller
 {
     public function index(Request $request): Response
     {
-        $query = Service::query()->latest();
+        $query = Service::query()->oldest('id');
 
         if ($request->filled('q')) {
             $q = $request->q;
